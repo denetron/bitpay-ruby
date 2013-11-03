@@ -9,6 +9,15 @@ module BitPayRuby
     attr_reader :id,
       :url,
       :posData,
+      :notificationURL,
+      :transactionSpeed,
+      :fullNotifications,
+      :notificationEmail,
+      :redirectURL,
+      :orderID,
+      :itemDesc,
+      :itemCode,
+      :physical,
       :status,
       :price,
       :currency,
@@ -17,16 +26,17 @@ module BitPayRuby
       :expirationTime,
       :currentTime
 
-    def initialize price, currency
+    def initialize price, currency, options = {}
       @price = price
       @currency = currency
+      @options = options
     end
 
     def create
       response = BitPayRuby::connection.post "/api/invoice", {
         "price" => price,
         "currency" => currency
-      }
+      }.merge(@options)
       update! response.body
       self
     end
